@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { UploadCloud, Sparkles, Zap, AlertCircle, Loader2, ShieldCheck } from 'lucide-react';
 import { extractDocument, mockExtractDocument } from '../api';
 
@@ -8,8 +8,31 @@ export default function Step1_Ingestion({ onComplete, isVoiceActive, speakText }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [dragging, setDragging] = useState(false);
+
   const handleFileChange = (e) => {
-    const selected = e.target.files[0];
+    const selected = e.target.files?.[0];
+    if (selected) {
+      setFile(selected);
+      setPreviewUrl(URL.createObjectURL(selected));
+      setError(null);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragging(false);
+    const selected = e.dataTransfer.files?.[0];
     if (selected) {
       setFile(selected);
       setPreviewUrl(URL.createObjectURL(selected));
@@ -55,7 +78,7 @@ export default function Step1_Ingestion({ onComplete, isVoiceActive, speakText }
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
       
       {/* Official Header */}
-      <div className="bg-[#0f172a] p-6 sm:p-8 flex items-start gap-4 text-white">
+      <div className="bg-primary p-6 sm:p-8 flex items-start gap-4 text-white">
         <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
           <UploadCloud className="w-6 h-6 text-emerald-400" />
         </div>
@@ -73,7 +96,12 @@ export default function Step1_Ingestion({ onComplete, isVoiceActive, speakText }
       <div className="p-6 sm:p-8">
         <div className="max-w-2xl mx-auto space-y-8">
           
-          <label className="relative flex flex-col items-center justify-center border-2 border-dashed border-blue-200 hover:border-blue-500 rounded-3xl p-10 bg-blue-50/50 hover:bg-blue-50 cursor-pointer transition-all group overflow-hidden">
+          <label 
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-3xl p-10 cursor-pointer transition-all group overflow-hidden ${dragging ? 'border-blue-500 bg-blue-100/50 scale-[1.02]' : 'border-blue-200 hover:border-blue-500 bg-blue-50/50 hover:bg-blue-50'}`}
+          >
             <input
               type="file"
               accept="image/*,application/pdf"
@@ -104,14 +132,12 @@ export default function Step1_Ingestion({ onComplete, isVoiceActive, speakText }
                   <UploadCloud className="w-8 h-8" />
                 </div>
                 <div>
-                  <p className="text-base font-black text-[#0f172a]">Click to Upload Document</p>
+                  <p className="text-base font-black text-primary">Click to Upload Document</p>
                   <p className="text-base font-medium text-slate-500 mt-1">Supports highly legible JPG, PNG, or scanned PDFs</p>
                 </div>
               </div>
             )}
             
-            {/* Decorative background circle */}
-            <div className="absolute w-[800px] h-[800px] bg-white opacity-40 rounded-full top-full left-1/2 -translate-x-1/2 -translate-y-[20%] group-hover:-translate-y-[30%] transition-transform duration-700 ease-out z-0"></div>
           </label>
 
           {error && (
@@ -125,7 +151,7 @@ export default function Step1_Ingestion({ onComplete, isVoiceActive, speakText }
             <button
               onClick={handleRealOCR}
               disabled={loading}
-              className="flex-1 flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-[#0f172a] hover:bg-blue-900 disabled:bg-slate-300 text-white font-black text-base shadow-xl shadow-slate-200 transition-all"
+              className="flex-1 flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-primary hover:bg-blue-900 disabled:bg-slate-300 text-white font-black text-base shadow-xl shadow-slate-200 transition-all"
             >
               {loading ? (
                 <>
@@ -143,7 +169,7 @@ export default function Step1_Ingestion({ onComplete, isVoiceActive, speakText }
             <button
               onClick={handleMockSample}
               disabled={loading}
-              className="flex-1 flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-white hover:bg-slate-50 border-2 border-slate-200 text-[#0f172a] font-black text-base shadow-sm transition-all"
+              className="flex-1 flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-white hover:bg-slate-50 border-2 border-slate-200 text-primary font-black text-base shadow-sm transition-all"
             >
               <Zap className="w-5 h-5 text-amber-500" />
               <span>Load Approved Sample</span>

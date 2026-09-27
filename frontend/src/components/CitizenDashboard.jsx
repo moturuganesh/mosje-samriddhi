@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { fetchMyApplications } from '../api';
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+﻿import React, { useState, useEffect } from 'react';
+import { fetchMyApplications, apiClient } from '../api';
 import { FileText, MapPin, CheckCircle2, AlertCircle, Calendar, IndianRupee, Clock, Download, ArrowRight, ShieldCheck, Building2 } from 'lucide-react';
 
 export default function CitizenDashboard({ user }) {
@@ -31,7 +30,7 @@ export default function CitizenDashboard({ user }) {
         </div>
       )}
 
-      <div className="bg-[#0f172a] rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden mb-12">
+      <div className="bg-primary rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden mb-12">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
@@ -55,7 +54,7 @@ export default function CitizenDashboard({ user }) {
 
       <div className="space-y-8">
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-          <h2 className="text-2xl font-black text-[#0f172a] flex items-center gap-3">
+          <h2 className="text-2xl font-black text-primary flex items-center gap-3">
             <FileText className="w-6 h-6 text-blue-600" />
             My Applications
           </h2>
@@ -90,7 +89,7 @@ export default function CitizenDashboard({ user }) {
                     }`}>
                       {app.status}
                     </span>
-                    <h3 className="text-xl font-black text-[#0f172a] leading-tight mb-2">
+                    <h3 className="text-xl font-black text-primary leading-tight mb-2">
                       {app.scheme_data?.scheme_name || 'Loan Application'}
                     </h3>
                     <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">
@@ -104,7 +103,7 @@ export default function CitizenDashboard({ user }) {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-[#f8fafc] p-4 md:p-5 rounded-2xl border border-slate-100">
                       <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Approved Limit</p>
-                      <p className="text-2xl md:text-3xl font-black text-[#0f172a]">
+                      <p className="text-2xl md:text-3xl font-black text-primary">
                         ₹{(app.scheme_data?.max_loan_limit || 0).toLocaleString('en-IN')}
                       </p>
                     </div>
@@ -190,9 +189,9 @@ export default function CitizenDashboard({ user }) {
                   {/* Actions */}
                   <div className="flex justify-between items-center pt-2 print:hidden">
                     <p className="text-xs font-bold text-slate-400 flex items-center gap-2">
-                      <Calendar className="w-4 h-4"/> Applied Recently
+                      <Calendar className="w-4 h-4"/> {app.created_at ? new Date(app.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
-                    <button onClick={() => window.open(`${API_BASE}/applications/${app.arn}/pdf`, '_blank')} className="flex items-center gap-2 bg-[#0f172a] hover:bg-blue-900 text-white px-6 py-3 rounded-xl font-black text-sm shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5">
+                    <button onClick={() => window.open(`${apiClient.defaults.baseURL}/applications/${app.arn}/pdf`, '_blank')} className="flex items-center gap-2 bg-primary hover:bg-blue-900 text-white px-6 py-3 rounded-xl font-black text-sm shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5">
                       <Download className="w-4 h-4" /> Sanction Docket
                     </button>
                   </div>
@@ -205,3 +204,4 @@ export default function CitizenDashboard({ user }) {
     </div>
   );
 }
+

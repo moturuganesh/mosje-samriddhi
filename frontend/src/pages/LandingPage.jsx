@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowRight, ShieldCheck, MapPin, Brain, FileCheck, Building2, TrendingUp, Search, Landmark, Target, CheckCircle2 } from 'lucide-react';
 
 export default function LandingPage({ onStartApply, onBrowseDirectory }) {
@@ -6,7 +6,7 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out min-h-screen bg-[#f8fafc] font-sans selection:bg-amber-200 selection:text-amber-900">
       
       {/* HERO SECTION - Official & Photographic */}
-      <section className="relative bg-[#0f172a] text-white overflow-hidden">
+      <section className="relative bg-primary text-white overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -87,7 +87,7 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] mb-4">Dedicated Schemes for Every Sector</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-primary mb-4">Dedicated Schemes for Every Sector</h2>
             <div className="w-24 h-1.5 bg-amber-500 mx-auto rounded-full mb-6"></div>
             <p className="text-slate-600 font-medium text-lg">Our deterministic engine matches your exact demographic and socioeconomic profile to the perfect concessional loan scheme.</p>
           </div>
@@ -151,16 +151,16 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="mb-16 flex flex-col md:flex-row justify-between items-end gap-6">
             <div>
-              <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] mb-4">Application Process</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-primary mb-4">Application Process</h2>
               <div className="w-16 h-1.5 bg-amber-500 rounded-full mb-4"></div>
               <p className="text-slate-600 font-medium max-w-2xl">A radically simplified 4-step digital journey. Zero paperwork, zero hallucination, and mathematically guaranteed routing.</p>
             </div>
-            <button onClick={onStartApply} className="shrink-0 bg-[#0f172a] hover:bg-blue-900 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-colors">Start Application →</button>
+            <button onClick={onStartApply} className="shrink-0 bg-primary hover:bg-blue-900 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-colors">Start Application →</button>
           </div>
 
           <div className="grid md:grid-cols-4 gap-4 relative">
             {/* Desktop connecting line */}
-            <div className="hidden md:block absolute top-10 left-12 right-12 h-0.5 bg-slate-200 z-0"></div>
+            <div className="hidden md:block absolute top-6 left-12 right-12 h-0.5 bg-slate-200 z-0"></div>
 
             {/* Step 1 */}
             <div className="relative z-10 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
@@ -195,7 +195,7 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
       </section>
 
       {/* GEO-SPATIAL TRANSPARENCY BLOCK */}
-      <section className="py-24 bg-[#0f172a] text-white overflow-hidden relative">
+      <section className="py-24 bg-primary text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
           <svg viewBox="0 0 100 100" className="w-full h-full text-blue-500 fill-current" preserveAspectRatio="none">
              <path d="M0,100 C20,80 40,20 100,0 L100,100 Z" />
@@ -304,7 +304,7 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
       </section>
 
       {/* FOOTER - Official Government Look */}
-      <footer className="bg-[#0f172a] text-slate-400 py-12 border-t border-slate-800 text-base">
+      <footer className="bg-primary text-slate-400 py-12 border-t border-slate-800 text-base">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid md:grid-cols-4 gap-8 border-b border-slate-800 pb-8 mb-8">
             <div className="md:col-span-2">
@@ -344,7 +344,7 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
           </div>
           
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-base font-medium">
-            <p>&copy; 2024 Developed for Smart India Hackathon (SIH). Prototype for MoSJE / NSFDC.</p>
+            <p>&copy; 2026 Developed for Smart India Hackathon (SIH). Prototype for MoSJE / NSFDC.</p>
             <p className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
               Designed with strict compliance to GIGW 3.0 standards.
@@ -356,3 +356,4 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
     </div>
   );
 }
+

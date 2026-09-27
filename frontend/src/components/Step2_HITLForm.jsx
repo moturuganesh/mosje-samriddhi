@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { MapPin, FileEdit, ArrowRight, Loader2, AlertCircle, ArrowLeft, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { evaluateScheme } from '../api';
 
@@ -124,7 +124,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
       
       {/* Official Header */}
-      <div className="bg-[#0f172a] p-6 sm:p-8 flex items-start gap-4 text-white">
+      <div className="bg-primary p-6 sm:p-8 flex items-start gap-4 text-white">
         <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
           <FileEdit className="w-6 h-6 text-amber-400" />
         </div>
@@ -154,7 +154,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
         <div className="space-y-6">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
             <ShieldCheck className="w-4 h-4 text-blue-600" />
-            <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider">Extracted Demographics</h3>
+            <h3 className="text-base font-black text-primary uppercase tracking-wider">Extracted Demographics</h3>
           </div>
 
           <div className="space-y-2">
@@ -163,7 +163,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
               type="text"
               value={formData.applicant_name ?? ''}
               onChange={(e) => handleChange('applicant_name', e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 text-base font-bold focus:ring-2 focus:ring-[#0f172a] focus:border-[#0f172a] bg-slate-50 focus:bg-white transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-slate-300 text-base font-bold focus:ring-2 focus:ring-primary focus:border-primary bg-slate-50 focus:bg-white transition-all"
             />
           </div>
 
@@ -231,6 +231,18 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
               </select>
             </div>
           </div>
+          
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={handleGPSLocation}
+              disabled={gpsStatus === 'Locating...'}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 border-2 border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 hover:border-blue-300 transition-all"
+            >
+              {gpsStatus === 'Locating...' ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
+              {gpsStatus || 'Detect My Location'}
+            </button>
+          </div>
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
@@ -249,7 +261,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
                 value={formData.annual_family_income ?? ''}
                 onChange={(e) => handleChange('annual_family_income', e.target.value === '' ? '' : Number(e.target.value))}
                 className={`w-full pl-8 pr-4 py-3 rounded-xl border text-base font-bold focus:ring-2 bg-slate-50 focus:bg-white transition-all ${
-                  isIncomeEligible ? 'border-slate-300 focus:ring-[#0f172a] focus:border-[#0f172a]' : 'border-rose-300 text-rose-700 focus:ring-rose-500'
+                  isIncomeEligible ? 'border-slate-300 focus:ring-primary focus:border-primary' : 'border-rose-300 text-rose-700 focus:ring-rose-500'
                 }`}
               />
             </div>
@@ -261,7 +273,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
           
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
             <ShieldCheck className="w-4 h-4 text-amber-500" />
-            <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider">Financial Requirement</h3>
+            <h3 className="text-base font-black text-primary uppercase tracking-wider">Financial Requirement</h3>
           </div>
 
           <div className="bg-[#f8fafc] p-5 rounded-2xl border border-slate-200">
@@ -384,7 +396,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
         <button
           onClick={handleEvaluate}
           disabled={loading || formData.project_cost > 5000000 || !isIncomeEligible}
-          className="flex items-center space-x-3 px-8 py-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-[#0f172a] font-black text-base shadow-xl shadow-amber-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center space-x-3 px-8 py-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-primary font-black text-base shadow-xl shadow-amber-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>
@@ -402,3 +414,4 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
     </div>
   );
 }
+

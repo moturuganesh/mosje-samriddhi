@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, X, Sparkles, Building2, User, Landmark, ShieldCheck } from 'lucide-react';
 import { sendChatMessage } from '../api';
 
@@ -284,3 +284,4 @@ export default function AudioKioskOverlay({
     </div>
   );
 }
+

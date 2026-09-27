@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Step1_Ingestion from './components/Step1_Ingestion';
 import Step2_HITLForm from './components/Step2_HITLForm';
@@ -33,6 +33,13 @@ const [step, setStep] = useState(1);
   const [submittedApplication, setSubmittedApplication] = useState(null);
   const [currentView, setCurrentView] = useState('landing'); // 'landing', 'flow', or 'dashboard'
   const [showDirectory, setShowDirectory] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [docketData, setDocketData] = useState(null);
+  
+  const showToast = ({type, message}) => {
+    setToast({type, message});
+    setTimeout(() => setToast(null), 4000);
+  };
   
   const [user, setUser] = useState(null);
 
@@ -299,7 +306,7 @@ const [step, setStep] = useState(1);
       setStep(5);
     } catch (error) {
       console.error("Routing error:", error);
-      alert("Error finding branch. Please try again.");
+      showToast({type: 'error', message: "Error finding branch. Please try again."});
     }
   };
 
@@ -340,12 +347,17 @@ const [step, setStep] = useState(1);
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      alert("Failed to submit application.");
+      showToast({type: 'error', message: "Failed to submit application."});
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {toast && (
+        <div className={`fixed top-24 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-xl shadow-lg border text-white font-bold animate-in slide-in-from-top-4 fade-in duration-300 ${toast.type === 'error' ? 'bg-red-600 border-red-700 toast-error' : 'bg-emerald-600 border-emerald-700 toast-success'}`}>
+          {toast.message}
+        </div>
+      )}
       <Navbar 
         onOpenChat={() => setIsChatOpen(true)} 
         onOpenAudioKiosk={() => setIsAudioKioskOpen(true)} 
@@ -367,11 +379,11 @@ const [step, setStep] = useState(1);
       ) : currentView === 'admin' ? (
         <AdminDashboard />
       ) : currentView === 'dashboard' ? (
-        <CitizenDashboard user={user} />
+        <CitizenDashboard user={user} onViewDocket={(data) => { setDocketData(data); setShowDocketModal(true); }} />
       ) : (
-        <main className="max-w-4xl mx-auto pt-[160px] pb-12 px-4 sm:px-6">
+        <main className="max-w-4xl mx-auto pt-32 md:pt-36 lg:pt-40 pb-12 px-4 sm:px-6">
           <div className="mb-10 text-center">
-            <h1 className="text-4xl font-black text-[#0f172a] tracking-tight mb-3">
+            <h1 className="text-4xl font-black text-primary tracking-tight mb-3">
               Apply for MoSJE Loan
             </h1>
             <p className="text-slate-500 font-medium text-lg">
@@ -381,26 +393,27 @@ const [step, setStep] = useState(1);
 
           <div className="mb-12 relative px-4">
             <div className="absolute top-5 left-10 right-10 h-1.5 bg-slate-200 -z-10 -translate-y-1/2 rounded-full"></div>
-            <div className={`absolute top-5 left-10 h-1.5 bg-[#0f172a] -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out`} style={{ width: `calc(${((step - 1) / 3) * 100}% - 40px)` }}></div>
+            <div className={`absolute top-5 left-10 h-1.5 bg-primary -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out`} style={{ width: `calc(${((step - 1) / 4) * 100}% - 40px)` }}></div>
             
             <div className="flex justify-between items-start">
               {[
                 { num: 1, label: 'Digital KYC' },
                 { num: 2, label: 'Verify' },
                 { num: 3, label: 'Schemes' },
-                { num: 4, label: 'Route' }
+                { num: 4, label: 'EMI Calc' },
+                { num: 5, label: 'Route' }
               ].map((s) => (
                 <div key={s.num} className="flex flex-col items-center w-20">
                   <div 
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-black border-4 transition-all duration-500 ${
                       step >= s.num 
-                        ? 'bg-[#0f172a] border-white text-white shadow-lg shadow-slate-900/20' 
+                        ? 'bg-primary border-white text-white shadow-lg shadow-slate-900/20' 
                         : 'bg-slate-100 border-white text-slate-400'
                     }`}
                   >
                     {step > s.num ? '✓' : s.num}
                   </div>
-                  <span className={`text-xs font-bold mt-2 ${step >= s.num ? 'text-[#0f172a]' : 'text-slate-400'}`}>
+                  <span className={`text-xs font-bold mt-2 ${step >= s.num ? 'text-primary' : 'text-slate-400'}`}>
                     {s.label}
                   </span>
                 </div>
@@ -483,7 +496,13 @@ const [step, setStep] = useState(1);
         onClose={() => setIsAuthModalOpen(false)}
         onAuthSuccess={handleAuthSuccess}
       />
+      <SanctionDocketModal
+        isOpen={showDocketModal}
+        onClose={() => setShowDocketModal(false)}
+        docketData={docketData}
+      />
       {showDirectory && <SchemeDirectory onClose={() => setShowDirectory(false)} />}
     </div>
   );
 }
+

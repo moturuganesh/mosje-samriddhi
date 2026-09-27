@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Volume2, X, Sparkles, ShieldCheck, Square, Activity } from 'lucide-react';
 import { sendChatMessage } from '../api';
 
@@ -11,6 +11,7 @@ export default function AudioKiosk({
   assignedBranch = null
 }) {
   const [lang, setLang] = useState('ta'); // Default to Tamil for TN
+  const hasSpeechSupport = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
   
   // STRICT UI STATE MACHINE
   // IDLE -> LISTENING -> PROCESSING -> SPEAKING -> IDLE
@@ -254,6 +255,11 @@ export default function AudioKiosk({
         </div>
 
         {/* Language Selection */}
+        {!hasSpeechSupport && (
+          <div className="bg-rose-900/50 text-rose-200 p-3 rounded-xl border border-rose-500 text-sm font-bold">
+            Voice input requires Chrome or Edge browser.
+          </div>
+        )}
         <div className="flex justify-center items-center gap-2">
           {[
             { code: 'ta', label: 'தமிழ் (Tamil)' },
@@ -360,3 +366,4 @@ export default function AudioKiosk({
     </div>
   );
 }
+

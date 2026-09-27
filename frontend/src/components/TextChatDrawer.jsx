@@ -1,4 +1,4 @@
-import ReactMarkdown from 'react-markdown';
+﻿import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, X, Bot, User, RotateCcw, Volume2, Sparkles, MessageSquare, AlertCircle } from 'lucide-react';
@@ -314,3 +314,4 @@ export default function TextChatDrawer({
     </div>
   );
 }
+

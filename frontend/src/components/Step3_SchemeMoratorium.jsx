@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Calculator, ArrowLeft, ArrowRight, Info, TrendingUp, AlertCircle, Table, Loader2 } from 'lucide-react';
 import { calculateEMI } from '../api';
 
@@ -16,6 +16,31 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
       setLoanAmount(Math.min(selectedScheme.max_loan_limit, 500000));
     }
   }, [selectedScheme]);
+
+  useEffect(() => {
+    if (selectedScheme && loanAmount >= 10000 && loanAmount <= selectedScheme.max_loan_limit) {
+      const calculate = async () => {
+        setCalculating(true);
+        try {
+          const data = await calculateEMI({
+            loan_amount: loanAmount,
+            annual_interest_rate_pct: selectedScheme.interest_rate_pct || 5.0,
+            tenure_months: selectedScheme.recommended_tenure_months || 60,
+            moratorium_months: moratoriumMonths,
+            compounding_frequency: 'monthly'
+          });
+          data.selected_scheme_data = selectedScheme;
+          setEmiResult(data);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setCalculating(false);
+        }
+      };
+      const timerId = setTimeout(() => calculate(), 400);
+      return () => clearTimeout(timerId);
+    }
+  }, [loanAmount, moratoriumMonths, selectedScheme]);
 
   const handleCalculate = async () => {
     if (!selectedScheme) return;
@@ -43,7 +68,7 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-8 text-center border border-slate-200">
         <AlertCircle className="w-12 h-12 text-rose-500 mx-auto mb-4" />
         <h2 className="text-xl font-bold text-slate-800">No Scheme Selected</h2>
-        <button onClick={onBack} className="mt-4 px-6 py-2 bg-[#0f172a] text-white rounded-lg font-bold">Go Back</button>
+        <button onClick={onBack} className="mt-4 px-6 py-2 bg-primary text-white rounded-lg font-bold">Go Back</button>
       </div>
     );
   }
@@ -52,13 +77,13 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
     <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
       
       {/* Official Header */}
-      <div className="bg-[#0f172a] p-6 sm:p-8 flex items-start gap-4 text-white">
+      <div className="bg-primary p-6 sm:p-8 flex items-start gap-4 text-white">
         <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
           <Calculator className="w-6 h-6 text-emerald-400" />
         </div>
         <div>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-blue-500/20 text-blue-300 font-bold text-[10px] uppercase tracking-widest border border-blue-500/30 mb-2">
-            Step 4 of 4 • Financial Structuring
+            Step 4 of 5 • Financial Structuring
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">EMI & Moratorium Simulator</h2>
           <p className="text-slate-400 text-base mt-2 max-w-2xl">
@@ -73,12 +98,12 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
         <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl mb-8 flex flex-col md:flex-row justify-between md:items-center gap-4">
           <div>
             <p className="text-[10px] uppercase font-black tracking-widest text-emerald-600 mb-1">Approved Scheme Profile</p>
-            <h3 className="text-lg font-black text-[#0f172a]">{selectedScheme.scheme_name}</h3>
+            <h3 className="text-lg font-black text-primary">{selectedScheme.scheme_name}</h3>
             <p className="text-base text-slate-500 font-medium">Interest Rate: <span className="font-bold text-emerald-700">{selectedScheme.interest_rate_pct}% p.a.</span> (Fixed)</p>
           </div>
           <div className="text-right">
             <p className="text-base text-slate-500 font-medium uppercase tracking-wider mb-1">Maximum Statutory Limit</p>
-            <p className="text-xl font-black text-[#0f172a]">₹{(selectedScheme.max_loan_limit).toLocaleString('en-IN')}</p>
+            <p className="text-xl font-black text-primary">₹{(selectedScheme.max_loan_limit).toLocaleString('en-IN')}</p>
           </div>
         </div>
 
@@ -107,7 +132,7 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
                 type="number"
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full pl-8 pr-4 py-4 rounded-xl text-lg font-bold border-2 border-slate-300 text-lg font-black text-[#0f172a] bg-slate-50 focus:bg-white focus:border-[#0f172a] focus:ring-1 focus:ring-[#0f172a]"
+                className="w-full pl-8 pr-4 py-4 rounded-xl text-lg font-bold border-2 border-slate-300 text-lg font-black text-primary bg-slate-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary"
               />
             </div>
           </div>
@@ -143,16 +168,16 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
            <button
             onClick={handleCalculate}
             disabled={calculating || loanAmount < 10000 || loanAmount > selectedScheme.max_loan_limit}
-            className="inline-flex items-center gap-3 px-8 py-4 bg-amber-500 hover:bg-amber-600 text-[#0f172a] rounded-xl font-black text-base shadow-xl shadow-amber-500/20 transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-amber-500 hover:bg-amber-600 text-primary rounded-xl font-black text-base shadow-xl shadow-amber-500/20 transition-all disabled:opacity-50"
           >
             {calculating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Calculator className="w-5 h-5" />}
-            Generate Repayment Schedule
+            Refresh Schedule
           </button>
         </div>
 
         {/* RESULTS SECTION */}
         {emiResult && (
-          <div className="bg-[#0f172a] rounded-2xl p-6 md:p-8 shadow-xl text-white">
+          <div className="bg-primary rounded-2xl p-6 md:p-8 shadow-xl text-white">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
               
               <div className="bg-slate-800/80 p-5 rounded-xl border border-slate-700">
@@ -212,7 +237,7 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
             </div>
 
             {showAmortization && emiResult?.amortization_schedule && (
-              <div className="mt-6 max-h-[300px] overflow-y-auto rounded-xl border border-slate-700 bg-[#0f172a]">
+              <div className="mt-6 max-h-[300px] overflow-y-auto rounded-xl border border-slate-700 bg-primary">
                 <table className="w-full text-left text-base text-slate-300">
                   <thead className="bg-slate-800 text-slate-400 font-black uppercase text-[10px] tracking-wider sticky top-0 z-10">
                     <tr>
@@ -269,7 +294,7 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
             if (emiResult) onComplete(emiResult);
           }}
           disabled={!emiResult}
-          className="flex items-center space-x-3 px-8 py-4 rounded-xl bg-[#0f172a] hover:bg-blue-900 text-white font-black text-base shadow-xl shadow-slate-900/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center space-x-3 px-8 py-4 rounded-xl bg-primary hover:bg-blue-900 text-white font-black text-base shadow-xl shadow-slate-900/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span>Confirm Schedule & Route to Branch</span>
           <ArrowRight className="w-5 h-5" />
@@ -278,3 +303,4 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
     </div>
   );
 }
+

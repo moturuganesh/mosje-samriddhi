@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, AlertTriangle, ShieldCheck, CheckCircle2, FileText, Landmark, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
@@ -13,7 +13,7 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
           <AlertTriangle className="w-10 h-10 text-rose-500" />
         </div>
         <div>
-          <h2 className="text-2xl font-black text-[#0f172a]">No Eligible Schemes Found</h2>
+          <h2 className="text-2xl font-black text-primary">No Eligible Schemes Found</h2>
           <p className="text-base text-slate-500 mt-2 max-w-lg mx-auto leading-relaxed">
             Based on your strictly verified demographic parameters and proposed project cost, we could not find any active MoSJE/NSFDC schemes that match.
           </p>
@@ -26,14 +26,14 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
     <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
       
       {/* Official Header */}
-      <div className="bg-[#0f172a] p-6 sm:p-8 flex items-start gap-4 text-white">
+      <div className="bg-primary p-6 sm:p-8 flex items-start gap-4 text-white">
         <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
           <Landmark className="w-6 h-6 text-blue-400" />
         </div>
         <div className="flex-1 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-blue-500/20 text-blue-300 font-bold text-[10px] uppercase tracking-widest border border-blue-500/30 mb-2">
-              Step 3 of 4 • Scheme Evaluation
+              Step 3 of 5 • Scheme Evaluation
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">Eligible Loan Schemes</h2>
             <p className="text-slate-400 text-base mt-2 max-w-2xl">
@@ -64,7 +64,7 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1.5">
-                      <h3 className="font-black text-[#0f172a] text-lg sm:text-xl">{scheme.scheme_name}</h3>
+                      <h3 className="font-black text-primary text-lg sm:text-xl">{scheme.scheme_name}</h3>
                       {idx === 0 && (
                         <span className="px-2.5 py-1 rounded bg-amber-100 text-amber-800 text-[10px] font-black uppercase tracking-widest border border-amber-200">
                           Top Recommendation
@@ -81,9 +81,17 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
                     </div>
                     <div className="h-8 w-px bg-slate-200 hidden md:block"></div>
                     <div className="text-right flex-1 md:flex-none">
-                      <div className="text-lg font-black text-[#0f172a]">₹{(scheme.max_loan_limit / 100000).toFixed(1)}L</div>
+                      <div className="text-lg font-black text-primary">₹{(scheme.max_loan_limit / 100000).toFixed(1)}L</div>
                       <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Max Limit</div>
                     </div>
+                    {!isExpanded && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); onSelectScheme(scheme); }}
+                        className="hidden md:flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-blue-900 text-white text-sm font-bold rounded-lg transition-all"
+                      >
+                        Select
+                      </button>
+                    )}
                     <div className="text-slate-400">
                       {isExpanded ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
                     </div>
@@ -94,7 +102,7 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
                 {isExpanded && (
                   <div className="p-6 md:p-8 bg-white animate-in slide-in-from-top-2 duration-300">
                     <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-xl mb-8">
-                      <p className="text-base text-[#0f172a] font-medium leading-relaxed">{scheme.description}</p>
+                      <p className="text-base text-primary font-medium leading-relaxed">{scheme.description}</p>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -146,7 +154,7 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
                             </h4>
                             <div className="flex flex-wrap gap-2">
                               {scheme.documents_required?.map((doc, i) => (
-                                <span key={i} className="px-4 py-2 bg-white text-[#0f172a] text-sm font-bold rounded-xl border border-slate-200 shadow-sm">
+                                <span key={i} className="px-4 py-2 bg-white text-primary text-sm font-bold rounded-xl border border-slate-200 shadow-sm">
                                   {doc}
                                 </span>
                               ))}
@@ -158,7 +166,7 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
                     <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
                       <button 
                         onClick={(e) => { e.stopPropagation(); onSelectScheme(scheme); }}
-                        className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#0f172a] hover:bg-blue-900 text-white font-black text-base shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5"
+                        className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary hover:bg-blue-900 text-white font-black text-base shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5"
                       >
                         <span>Select Scheme & Setup EMI</span>
                         <ArrowRight className="w-5 h-5" />
@@ -174,3 +182,4 @@ export default function SchemeExplorer({ evaluationResult, onSelectScheme }) {
     </div>
   );
 }
+

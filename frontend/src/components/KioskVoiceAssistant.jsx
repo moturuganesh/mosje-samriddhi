@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Send, Volume2, VolumeX, X, Sparkles, Bot, User, RotateCcw, MessageSquare, Square } from 'lucide-react';
 import { sendChatMessage } from '../api';
 
@@ -402,3 +402,4 @@ export default function KioskVoiceAssistant({
     </div>
   );
 }
+

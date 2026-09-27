@@ -1,33 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans;
+    @apply bg-surface text-slate-900 antialiased font-sans;
+  }
+
+  /* Smooth scrolling globally */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
+@layer components {
+  /* Government Card System */
+  .gov-card {
+    @apply bg-white rounded-2xl border border-slate-200 shadow-card transition-all duration-300;
+  }
+  .gov-card:hover {
+    @apply shadow-card-hover border-slate-300;
+  }
+
+  /* Premium Glass Surface */
+  .glass-surface {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-glass;
+  }
+
+  /* Government Section Header */
+  .gov-header {
+    @apply bg-primary text-white rounded-t-2xl p-6 sm:p-8;
+  }
+
+  /* Primary CTA Button */
+  .btn-primary {
+    @apply bg-primary text-white font-bold px-6 py-3 rounded-xl
+           hover:bg-primary-hover active:scale-[0.98]
+           transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  /* Accent CTA Button */
+  .btn-accent {
+    @apply bg-accent text-primary font-bold px-6 py-3 rounded-xl
+           hover:bg-accent-hover active:scale-[0.98]
+           transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  /* Ghost/Outline Button */
+  .btn-ghost {
+    @apply bg-transparent border-2 border-slate-200 text-slate-700 font-bold px-6 py-3 rounded-xl
+           hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98]
+           transition-all duration-200;
+  }
+
+  /* Status Badge System */
+  .badge-success {
+    @apply bg-success-light text-success-dark text-xs font-bold px-3 py-1 rounded-full;
+  }
+  .badge-danger {
+    @apply bg-danger-light text-danger-dark text-xs font-bold px-3 py-1 rounded-full;
+  }
+  .badge-accent {
+    @apply bg-accent-surface text-accent font-bold text-xs px-3 py-1 rounded-full border border-amber-200;
+  }
+
+  /* Form Input */
+  .gov-input {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white
+           text-base font-semibold text-primary
+           focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none
+           transition-all duration-200 placeholder:text-slate-400;
+  }
+
+  /* Form Select */
+  .gov-select {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white
+           text-base font-semibold text-primary appearance-none cursor-pointer
+           focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none
+           transition-all duration-200;
+  }
+
+  /* Toast Notification */
+  .toast {
+    @apply fixed top-24 right-6 z-[9999] max-w-md px-6 py-4 rounded-2xl shadow-glass-lg
+           animate-in slide-in-from-top-4 fade-in duration-300
+           border backdrop-blur-xl;
+  }
+  .toast-success {
+    @apply toast bg-emerald-50/95 border-emerald-200 text-emerald-800;
+  }
+  .toast-error {
+    @apply toast bg-rose-50/95 border-rose-200 text-rose-800;
+  }
+  .toast-info {
+    @apply toast bg-blue-50/95 border-blue-200 text-blue-800;
+  }
+
+  /* Custom scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Thin styled scrollbar */
+  .styled-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .styled-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .styled-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+  .styled-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+}
+
+/* Leaflet Map */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   z-index: 10;
 }
 
-/* -----------------------------------------------------------------
-   Google Translate Overrides (Indian Govt Style - Hidden Artifacts)
-   ----------------------------------------------------------------- */
+/* Google Translate Overrides */
 .goog-te-banner-frame.skiptranslate {
-    display: none !important;
-} 
+  display: none !important;
+}
 body {
-    top: 0px !important; 
+  top: 0px !important;
 }
 .goog-text-highlight {
-    background-color: transparent !important;
-    box-shadow: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 #goog-gt-tt, .goog-te-balloon-frame {
+  display: none !important;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
     display: none !important;
+  }
 }

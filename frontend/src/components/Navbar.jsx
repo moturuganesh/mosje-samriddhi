@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { LogIn, User, ShieldCheck, Mic, Sparkles } from 'lucide-react';
+﻿import React, { useState } from 'react';
+import { LogIn, User, ShieldCheck, Mic, Sparkles, Menu, X } from 'lucide-react';
 
 export default function Navbar({ onOpenChat, onOpenAudioKiosk, user, onLoginClick, onLogoutClick, onDashboardClick, onBrowseDirectory, onHomeClick, onAdminClick }) {
   const [scale, setScale] = useState(100);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scaleText = (factor) => {
     let newScale = scale;
     if (factor === 'reset') newScale = 100;
@@ -57,7 +58,7 @@ export default function Navbar({ onOpenChat, onOpenAudioKiosk, user, onLoginClic
             </div>
             
             <div className="flex flex-col border-l-2 border-slate-200 pl-4 py-1">
-              <h1 className="text-2xl md:text-3xl font-black text-[#0f172a] leading-none tracking-tight group-hover:text-blue-900 transition-colors flex items-center gap-2">
+              <h1 className="text-2xl md:text-3xl font-black text-primary leading-none tracking-tight group-hover:text-blue-900 transition-colors flex items-center gap-2">
                 MoSJE <span className="text-amber-600">Samriddhi</span>
               </h1>
               <p className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest mt-1.5 hidden sm:block">
@@ -76,57 +77,115 @@ export default function Navbar({ onOpenChat, onOpenAudioKiosk, user, onLoginClic
           {/* Action Buttons */}
           <div className="flex flex-1 xl:flex-none justify-end items-center gap-2 md:gap-4 shrink-0 ml-auto">
             
-            {/* AI Tools - Prominent Gradients */}
-            <button
-              onClick={onOpenAudioKiosk}
-              title="Voice Kiosk"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all group"
-            >
-              <Mic className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="text-sm md:text-base hidden sm:block">Voice Kiosk</span>
-            </button>
-
-            <button
-              onClick={onOpenChat}
-              title="Ask AI Assistant"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all group"
-            >
-              <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="text-sm md:text-base hidden sm:block">Ask AI</span>
-            </button>
-            
-            <div className="h-8 w-px bg-slate-200 hidden md:block mx-1"></div>
-
-            {/* Admin & Dashboard - Solid Colors */}
-            <button
-              onClick={onAdminClick}
-              className="flex items-center gap-2 px-5 py-2.5 bg-emerald-700 text-white rounded-full font-bold hover:bg-emerald-800 transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5"
-            >
-              <ShieldCheck className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="text-sm md:text-base hidden xl:block">Admin</span>
-            </button>
-
-            {user ? (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={onDashboardClick}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#0f172a] text-white rounded-full font-bold hover:bg-slate-800 transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5"
-                >
-                  <User className="w-4 h-4 md:w-5 md:h-5" /> <span className="text-sm md:text-base hidden sm:block">Dashboard</span>
-                </button>
-                <button onClick={onLogoutClick} className="font-bold text-sm text-slate-500 hover:text-rose-600 px-2 transition-colors">Logout</button>
-              </div>
-            ) : (
+            <div className="hidden lg:flex items-center gap-2 md:gap-4">
               <button
-                onClick={onLoginClick}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#0f172a] text-white rounded-full font-bold hover:bg-slate-800 transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                onClick={onOpenAudioKiosk}
+                title="Voice Kiosk"
+                className="flex items-center gap-2 px-5 py-2.5 btn-accent text-white rounded-full font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all group"
               >
-                <LogIn className="w-4 h-4 md:w-5 md:h-5" /> <span className="text-sm md:text-base">Login</span>
+                <Mic className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-sm md:text-base hidden sm:block">Voice Kiosk</span>
               </button>
-            )}
+
+              <button
+                onClick={onOpenChat}
+                title="Ask AI Assistant"
+                className="flex items-center gap-2 px-5 py-2.5 btn-primary text-white rounded-full font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all group"
+              >
+                <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-sm md:text-base hidden sm:block">Ask AI</span>
+              </button>
+              
+              <div className="h-8 w-px bg-slate-200 hidden md:block mx-1"></div>
+
+              <button
+                onClick={onAdminClick}
+                className="flex items-center gap-2 px-5 py-2.5 btn-ghost rounded-full font-bold transition-colors shadow-sm hover:shadow-md hover:-translate-y-0.5"
+              >
+                <ShieldCheck className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-sm md:text-base hidden xl:block">Admin</span>
+              </button>
+
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={onDashboardClick}
+                    className="flex items-center gap-2 px-5 py-2.5 btn-accent text-white rounded-full font-bold transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                  >
+                    <User className="w-4 h-4 md:w-5 md:h-5" /> <span className="text-sm md:text-base hidden sm:block">Dashboard</span>
+                  </button>
+                  <button onClick={onLogoutClick} className="font-bold text-sm text-slate-500 hover:text-rose-600 px-2 transition-colors">Logout</button>
+                </div>
+              ) : (
+                <button
+                  onClick={onLoginClick}
+                  className="flex items-center gap-2 px-5 py-2.5 btn-accent text-white rounded-full font-bold transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                >
+                  <LogIn className="w-4 h-4 md:w-5 md:h-5" /> <span className="text-sm md:text-base">Login</span>
+                </button>
+              )}
+            </div>
+
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden p-2 text-slate-700 bg-slate-100 rounded-lg">
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu Panel */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-b-2 border-amber-500 shadow-xl flex flex-col p-4 gap-4 animate-in slide-in-from-top-2">
+            <button onClick={() => { onHomeClick(); setMobileMenuOpen(false); }} className="text-left px-4 py-2 font-black text-slate-700 hover:bg-slate-50 rounded-lg">Home</button>
+            <button onClick={() => { onBrowseDirectory(); setMobileMenuOpen(false); }} className="text-left px-4 py-2 font-black text-slate-700 hover:bg-slate-50 rounded-lg">Schemes</button>
+            <button onClick={() => { if(user) { onDashboardClick(); } else { onLoginClick(); } setMobileMenuOpen(false); }} className="text-left px-4 py-2 font-black text-slate-700 hover:bg-slate-50 rounded-lg">Track</button>
+            
+            <div className="h-px bg-slate-200 my-2"></div>
+            
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => { onOpenAudioKiosk(); setMobileMenuOpen(false); }}
+                className="flex justify-center items-center gap-2 px-5 py-2.5 btn-accent text-white rounded-full font-bold"
+              >
+                <Mic className="w-5 h-5" /> Voice Kiosk
+              </button>
+
+              <button
+                onClick={() => { onOpenChat(); setMobileMenuOpen(false); }}
+                className="flex justify-center items-center gap-2 px-5 py-2.5 btn-primary text-white rounded-full font-bold"
+              >
+                <Sparkles className="w-5 h-5" /> Ask AI
+              </button>
+
+              <button
+                onClick={() => { onAdminClick(); setMobileMenuOpen(false); }}
+                className="flex justify-center items-center gap-2 px-5 py-2.5 btn-ghost rounded-full font-bold"
+              >
+                <ShieldCheck className="w-5 h-5" /> Admin
+              </button>
+
+              {user ? (
+                <>
+                  <button
+                    onClick={() => { onDashboardClick(); setMobileMenuOpen(false); }}
+                    className="flex justify-center items-center gap-2 px-5 py-2.5 btn-accent text-white rounded-full font-bold"
+                  >
+                    <User className="w-5 h-5" /> Dashboard
+                  </button>
+                  <button onClick={() => { onLogoutClick(); setMobileMenuOpen(false); }} className="font-bold text-slate-500 hover:text-rose-600 py-2">Logout</button>
+                </>
+              ) : (
+                <button
+                  onClick={() => { onLoginClick(); setMobileMenuOpen(false); }}
+                  className="flex justify-center items-center gap-2 px-5 py-2.5 btn-accent text-white rounded-full font-bold"
+                >
+                  <LogIn className="w-5 h-5" /> Login
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
     </div>
   );
 }
+

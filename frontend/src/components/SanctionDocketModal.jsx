@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Award, Printer, X, FileText } from 'lucide-react';
 
 export default function SanctionDocketModal({
@@ -159,3 +159,4 @@ export default function SanctionDocketModal({
     </div>
   );
 }
+
