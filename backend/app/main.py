@@ -1,6 +1,10 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
-load_dotenv()
+
+# Load .env from the backend directory explicitly, not relative to CWD
+_backend_dir = Path(__file__).resolve().parent.parent
+load_dotenv(_backend_dir / ".env")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
