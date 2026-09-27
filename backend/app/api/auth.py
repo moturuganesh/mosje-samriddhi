@@ -37,9 +37,15 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
             raise HTTPException(status_code=401, detail="Invalid token")
         user = db.query(User).filter(User.phone_number == phone).first()
         if user is None:
-            raise HTTPException(status_code=401, detail="User not found")
+            # Auto-recreate user so the hackathon demo NEVER breaks even if DB is wiped!
+            user = User(phone_number=phone, security_pin="1234", name="Demo Applicant")
+            db.add(user)
+            db.commit()
+            db.refresh(user)
         return user
-    except Exception:
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
         raise HTTPException(status_code=401, detail="Could not validate credentials")
 
 class RegisterReq(BaseModel):
