@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link irel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Samriddhi | MoSJE Channel Finance Platform</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+    <!-- React vs Google Translate Crash Prevention Patch -->
+    <script>
+      if (typeof Node === 'function' && Node.prototype) {
+        const originalRemoveChild = Node.prototype.removeChild;
+        Node.prototype.removeChild = function(child) {
+          if (child.parentNode !== this) {
+            console.warn('React-Translate Patch: Blocked crash on removeChild');
+            return child;
+          }
+          return originalRemoveChild.apply(this, arguments);
+        };
+        const originalInsertBefore = Node.prototype.insertBefore;
+        Node.prototype.insertBefore = function(newNode, referenceNode) {
+          if (referenceNode && referenceNode.parentNode !== this) {
+            console.warn('React-Translate Patch: Blocked crash on insertBefore');
+            return newNode;
+          }
+          return originalInsertBefore.apply(this, arguments);
+        };
+      }
+    </script>
+      <style>
+      html.translating { opacity: 0; }
+      html.translated { opacity: 1; transition: opacity 0.4s ease-in; }
+    </style>
+    <script>
+      if (document.cookie.indexOf('googtrans=/en/hi') !== -1) {
+        document.documentElement.classList.add('translating');
+        setTimeout(function() {
+          document.documentElement.classList.remove('translating');
+          document.documentElement.classList.add('translated');
+        }, 800);
+      }
+    </script>
+  </head>
+  <body class="bg-slate-50 antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  
+    <div id="google_translate_element" style="position:absolute; width:1px; height:1px; overflow:hidden; opacity:0;"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'hi,en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+      function triggerTranslate(lang) {
+        var select = document.querySelector('.goog-te-combo');
+        if (select) {
+          select.value = lang;
+          select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        } else {
+          // Fallback if widget hasn't loaded yet
+          document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + window.location.hostname;
+          document.cookie = "googtrans=/en/" + lang + "; path=/";
+          window.location.reload();
+        }
+      }
+      window.switchToHindi = function() { triggerTranslate('hi'); };
+      window.switchToEnglish = function() { triggerTranslate('en'); };
+      
+      window.refreshTranslation = function() {
+        var select = document.querySelector('.goog-te-combo');
+        // Only refresh and mask if we are currently in Hindi
+        if (select && document.cookie.indexOf('googtrans=/en/hi') !== -1) {
+          document.documentElement.classList.remove('translated');
+          document.documentElement.classList.add('translating');
+          
+          // Force a re-scan by flipping to English then back to Hindi
+          select.value = 'en';
+          select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+          
+          setTimeout(function() {
+            select.value = 'hi';
+            select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+            
+            setTimeout(function() {
+              document.documentElement.classList.remove('translating');
+              document.documentElement.classList.add('translated');
+            }, 350);
+          }, 50);
+        }
+      };
+    </script>
+
+  </body>
+</html>
