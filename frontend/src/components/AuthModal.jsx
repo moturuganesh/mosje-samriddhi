@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, Lock, ArrowRight, ShieldCheck, User, Phone } from 'lucide-react';
+import { register, login } from '../api';
+
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const [name, setName] = useState('');
@@ -20,22 +22,21 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     setLoading(true);
 
     try {
-      // Simulate API call for demo presentation
-      await new Promise(r => setTimeout(r, 600));
+      let data;
+      try {
+        data = await register(phone, pin, name);
+      } catch (err) {
+        if (err.response && err.response.data && err.response.data.detail === 'Phone number already registered.') {
+          data = await login(phone, pin);
+        } else {
+          throw err;
+        }
+      }
       
-      const mockUser = {
-        name: name,
-        phone: phone,
-        is_demo: true
-      };
-      
-      onAuthSuccess({
-        user: mockUser,
-        token: 'demo-token-123'
-      });
+      onAuthSuccess(data);
       onClose();
     } catch (err) {
-      setError(err.message || 'Verification failed');
+      setError(err.response?.data?.detail || err.message || 'Verification failed');
     } finally {
       setLoading(false);
     }
