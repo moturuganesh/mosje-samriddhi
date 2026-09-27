@@ -529,11 +529,9 @@ export default function AdminDashboard() {
           >
 
             <TileLayer
-
-              attribution="&copy; OpenStreetMap"
-
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-
+              attribution="&copy; Google"
+              url="https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&gl=IN"
+              subdomains={['0', '1', '2', '3']}
             />
 
             {data?.branches?.map((b) => (

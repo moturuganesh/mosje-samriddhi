@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { MapPin, Navigation, ArrowLeft, ShieldCheck, CheckCircle2, AlertTriangle, Building2, Info, Map as MapIcon, AlertOctagon } from 'lucide-react';
@@ -112,8 +112,9 @@ export default function Step4_BranchMap({ routingResult, onBack, onSubmitApplica
           <div className="h-[400px] md:h-[500px] w-full z-0">
             <MapContainer center={userCoords} zoom={11} style={{ height: '100%', width: '100%' }}>
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution="&copy; Google"
+                url="https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&gl=IN"
+                subdomains={['0', '1', '2', '3']}
               />
               <ChangeMapView userCoords={userCoords} currentBranch={currentBranch} alternatives={alternatives} bypassed={bypassed} />
               
