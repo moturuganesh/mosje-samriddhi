@@ -1,28 +1,35 @@
-﻿import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, X, Bot, User, RotateCcw, Volume2, Sparkles, MessageSquare, AlertCircle } from 'lucide-react';
-import { sendChatMessage } from '../api';
+import { Send, X, Bot, User, RotateCcw, Volume2, Sparkles, MessageSquare, AlertCircle, Loader2 } from 'lucide-react';
+import { sendChatMessage, fetchTTS } from '../api';
 
 const QUICK_PROMPTS = {
   'en': [
     'What is my recommended scheme and interest rate?',
     'Explain the 3-month moratorium period',
     'Where should I go to get my loan?',
-    'What is my monthly EMI after moratorium?'
+    'What is my monthly EMI after moratorium?',
+    'Summarize my profile'
   ],
   'ta': [
-    'எனக்கு ஒதுக்கப்பட்ட வங்கி கிளை எது?',
-    'மகளிர் சம்ரிதி 4% வட்டி விபரம் கூறுங்கள்',
-    'மொரட்டோரியம் காலத்தில் தவணை செலுத்த வேண்டுமா?',
-    'எனது மாத EMI எவ்வளவு?'
+    'எனக்கான பரிந்துரைக்கப்பட்ட திட்டம் என்ன?',
+    'மோரடோரியம் என்றால் என்ன?',
+    'என் கடனை எங்கு பெறுவது?',
+    'எனது மாத EMI என்ன?'
   ],
   'hi': [
-    'मुझे अपना ऋण लेने किस बैंक शाखा जाना होगा?',
-    'महिला समृद्धि 4% ब्याज दर कैसे काम करती है?',
-    'मोरेटोरियम के बाद मेरी मासिक EMI कितनी होगी?',
-    'ऋण स्वीकृति के लिए कौन से दस्तावेज चाहिए?'
+    'मेरा अनुशंसित योजना क्या है?',
+    'मोरटोरियम का मतलब क्या है?',
+    'मेरा मासिक EMI क्या होगा?',
+    'मुझे अपना लोन कहाँ मिलेगा?'
   ]
+};
+
+const welcomeTexts = {
+  'en': "Hello! I am **Samriddhi**, your AI advisor. How can I assist you with your MoSJE/NSFDC application today?",
+  'ta': "வணக்கம்! நான் சம்ருத்தி. உங்கள்MoSJE/NSFDC விண்ணப்பத்திற்கு நான் எவ்வாறு உதவ முடியும்?",
+  'hi': "नमस्ते! मैं समृद्धि हूँ। मैं आपकी MoSJE/NSFDC आवेदन में कैसे मदद कर सकती हूँ?"
 };
 
 export default function TextChatDrawer({
@@ -37,38 +44,49 @@ export default function TextChatDrawer({
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null); // Dedicated error state
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [audioLoading, setAudioLoading] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const welcomeTexts = {
-      'en': 'Hello! I am Samriddhi, your MoSJE/NSFDC text advisor. Ask me anything about your matched loan schemes, moratorium benefits, or assigned bank branch.',
-      'ta': 'வணக்கம்! நான் சம்ரிதி, உங்கள் MoSJE & TAHDCO நிதியுதவி ஆலோசகர். உங்கள் கடன் திட்டம், வட்டி விகிதம் அல்லது ஒதுக்கப்பட்ட வங்கி கிளை பற்றி இங்கே கேட்கலாம்.',
-      'hi': 'नमस्ते! मैं समृद्धि हूँ, आपकी MoSJE/NSFDC वित्तीय सलाहकार। आप अपनी योजना, ब्याज दर या बैंक शाखा से संबंधित कोई भी प्रश्न यहाँ पूछ सकते हैं।'
-    };
+    let welcomeMsg = welcomeTexts[lang] || welcomeTexts['en'];
+    if (!formData || !formData.applicant_name) {
+      if (lang === 'ta') {
+        welcomeMsg = "வணக்கம்! நான் **சம்ருத்தி**, உங்கள் AI வழிகாட்டி. உங்கள் கடன் மற்றும் EMI பற்றிய தகவல்களைப் பெற, முதலில் உங்கள் விண்ணப்பத்தை நிரப்பவும் அல்லது லாகின் செய்யவும்.";
+      } else if (lang === 'hi') {
+        welcomeMsg = "नमस्ते! मैं **समृद्धि** हूँ, आपका AI सलाहकार। अपने लोन और EMI के बारे में जानकारी प्राप्त करने के लिए, कृपया अपना आवेदन पूरा करें या लॉग इन करें।";
+      } else {
+        welcomeMsg = "Hello! I am **Samriddhi**, your AI advisor. To get personalized insights about your loan and EMI, please complete your application or log in first.";
+      }
+    }
 
     setMessages([
       {
-        id: 'welcome-' + lang,
+        id: 'welcome-' + Date.now(),
         role: 'model',
-        text: welcomeTexts[lang] || welcomeTexts['en'],
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        audio_base64: null
+        text: welcomeMsg,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
-  }, [lang]);
+  }, [lang, formData]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading, errorMessage]);
 
-  const handlePlayAudio = (audioBase64) => {
-    if (!audioBase64) return;
+  const handlePlayAudio = async (msgId, text) => {
+    if (!text) return;
+    setAudioLoading(msgId);
     try {
-      const audio = new Audio(`data:audio/mp3;base64,${audioBase64}`);
-      audio.play();
+      const audioBase64 = await fetchTTS(text, lang);
+      if (audioBase64) {
+        const audio = new Audio(`data:audio/mp3;base64,${audioBase64}`);
+        audio.play();
+      }
     } catch (e) {
       console.error('Audio playback error:', e);
+    } finally {
+      setAudioLoading(null);
     }
   };
 
@@ -76,7 +94,6 @@ export default function TextChatDrawer({
     const textToSend = userMsg || inputText;
     if (!textToSend?.trim() || loading) return;
 
-    // Clear previous errors instantly (Fixes Ghost Text stacking)
     setErrorMessage(null);
 
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -92,21 +109,39 @@ export default function TextChatDrawer({
     setInputText('');
     setLoading(true);
 
+    if (!formData || !formData.applicant_name) {
+      setTimeout(() => {
+        let authErr = "I need access to your application records to assist you further. Please complete your application or log in first!";
+        if (lang === 'ta') authErr = "உங்களுக்கு உதவ உங்கள் விண்ணப்ப விவரங்கள் எனக்குத் தேவை. தயவுசெய்து உங்கள் விண்ணப்பத்தை முதலில் நிரப்பவும்!";
+        if (lang === 'hi') authErr = "आपकी सहायता करने के लिए मुझे आपके आवेदन रिकॉर्ड की आवश्यकता है। कृपया पहले अपना आवेदन पूरा करें!";
+        
+        setMessages((prev) => [...prev, {
+          id: (Date.now() + 1).toString(),
+          role: 'model',
+          text: authErr,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }]);
+        setLoading(false);
+      }, 600);
+      return;
+    }
+
     const historyPayload = updated
       .filter((m) => !m.id.startsWith('welcome-'))
       .map((m) => ({ role: m.role, text: m.text }));
 
     const appState = {
-      applicant_name: formData?.applicant_name || 'Beneficiary',
-      annual_family_income: formData?.annual_family_income || 180000,
-      gender: formData?.gender || 'F',
-      category: formData?.category || 'SC',
-      district: formData?.district || 'Chengalpattu',
-      state: formData?.state || 'Tamil Nadu',
-      project_cost: formData?.project_cost || 100000,
+      applicant_name: formData.applicant_name,
+      annual_family_income: formData.annual_family_income || 180000,
+      gender: formData.gender || 'F',
+      category: formData.category || 'SC',
+      district: formData.district || 'Chengalpattu',
+      state: formData.state || 'Tamil Nadu',
+      project_cost: formData.project_cost || 100000,
       scheme_name: evaluationResult?.primary_recommended_scheme?.scheme_name || 'Mahila Samriddhi Yojana (MSY)',
       interest_rate_pct: evaluationResult?.primary_recommended_scheme?.interest_rate_pct || 4.0,
       loan_amount: evaluationResult?.primary_recommended_scheme?.loan_amount || 90000,
+      promoter_contribution: 10000,
       moratorium_months: emiResult?.moratorium_months || 3,
       monthly_emi: emiResult?.monthly_emi_post_moratorium || 3221,
       recommended_branch: assignedBranch || {
@@ -121,25 +156,22 @@ export default function TextChatDrawer({
         message: textToSend,
         language: lang,
         history: historyPayload,
-        app_state: appState
+        app_state: appState,
+        generate_audio: false // Split TTS logic to dramatically reduce LLM text chat latency
       });
 
       const replyMsg = {
         id: (Date.now() + 1).toString(),
         role: 'model',
         text: res.reply_text || res.response || 'I am happy to assist you.',
-        audio_base64: res.audio_base64,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
       setMessages((prev) => [...prev, replyMsg]);
     } catch (err) {
       console.error(err);
-      // Display graceful error above input rather than as a permanent chat bubble
       const detail = err.response?.data?.detail || 'Unable to connect to the advisor service. Please try again.';
       setErrorMessage(detail);
-      
-      // Optionally remove the user message if it failed, but keeping it is usually better UX
     } finally {
       setLoading(false);
     }
@@ -193,7 +225,7 @@ export default function TextChatDrawer({
           {[
             { code: 'en', label: 'English' },
             { code: 'ta', label: 'தமிழ்' },
-            { code: 'hi', label: 'हिन्दी' }
+            { code: 'hi', label: 'हिंदी' }
           ].map((l) => (
             <button
               key={l.code}
@@ -229,24 +261,29 @@ export default function TextChatDrawer({
             </div>
 
             <div
-              className={`max-w-[80%] rounded-2xl px-5 py-3.5 shadow-md space-y-1.5 ${
+              className={`max-w-[85%] rounded-2xl px-5 py-3.5 shadow-md space-y-1.5 ${
                 m.role === 'user'
                   ? 'bg-blue-600 text-white rounded-br-sm'
                   : 'bg-slate-800 border border-slate-700 text-slate-100 rounded-bl-sm'
               }`}
             >
-              <div className="leading-relaxed text-[15px] prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0 prose-strong:text-current">
+              <div className="leading-relaxed text-[15px] prose prose-sm prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0 prose-strong:text-amber-100 prose-strong:font-bold prose-p:text-slate-100 prose-li:text-slate-100">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
-                </div>
-              <div className="flex items-center justify-between text-xs opacity-70 pt-1">
+              </div>
+              <div className="flex items-center justify-between text-xs opacity-70 pt-2 border-t border-slate-700/50 mt-2">
                 <span>{m.time}</span>
-                {m.audio_base64 && (
+                {m.role === 'model' && (
                   <button
-                    onClick={() => handlePlayAudio(m.audio_base64)}
-                    className="hover:opacity-100 text-blue-200 flex items-center gap-1 font-bold"
+                    onClick={() => handlePlayAudio(m.id, m.text)}
+                    disabled={audioLoading === m.id}
+                    className="hover:opacity-100 text-blue-200 flex items-center gap-1 font-bold disabled:opacity-50"
                     title="Listen to native audio"
                   >
-                    <Volume2 className="w-3.5 h-3.5" /> Listen
+                    {audioLoading === m.id ? (
+                      <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading...</>
+                    ) : (
+                      <><Volume2 className="w-3.5 h-3.5" /> Listen</>
+                    )}
                   </button>
                 )}
               </div>
@@ -267,7 +304,7 @@ export default function TextChatDrawer({
       </div>
 
       {/* Suggested Quick Prompts */}
-      <div className="px-5 py-3 bg-slate-950/80 border-t border-slate-800 flex gap-2 overflow-x-auto no-scrollbar">
+      <div className="px-5 py-3 bg-slate-950/80 border-t border-slate-800 flex gap-2 overflow-x-auto styled-scrollbar">
         {(QUICK_PROMPTS[lang] || QUICK_PROMPTS['en']).map((qp, idx) => (
           <button
             key={idx}
@@ -300,7 +337,7 @@ export default function TextChatDrawer({
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder={lang === 'ta' ? 'உங்கள் கேள்வியைத் தட்டச்சு செய்க...' : lang === 'hi' ? 'अपना प्रश्न यहाँ लिखें...' : 'Type your question here...'}
+          placeholder={lang === 'ta' ? 'கேள்வியை இங்கே தட்டச்சு செய்க...' : lang === 'hi' ? 'अपना प्रश्न यहां टाइप करें...' : 'Type your question here...'}
           className="flex-1 bg-slate-800 border-2 border-slate-700 focus:border-blue-500 text-sm text-white rounded-xl px-4 py-3.5 focus:outline-none placeholder-slate-400 font-medium transition-colors"
         />
         <button
@@ -314,4 +351,3 @@ export default function TextChatDrawer({
     </div>
   );
 }
-

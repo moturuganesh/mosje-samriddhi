@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Volume2, X, Sparkles, ShieldCheck, Square, Activity } from 'lucide-react';
 import { sendChatMessage } from '../api';
 
@@ -91,14 +91,23 @@ export default function AudioKiosk({
     setKioskState('PROCESSING');
     setErrorMessage(null);
 
+    if (!formData || !formData.applicant_name) {
+      setKioskState('IDLE');
+      let authErr = "Authentication Required: Please complete your application or log in first.";
+      if (lang === 'ta') authErr = "அங்கீகாரம் தேவை: தயவுசெய்து உங்கள் விண்ணப்பத்தை முதலில் நிரப்பவும்.";
+      if (lang === 'hi') authErr = "प्रमाणीकरण आवश्यक: कृपया पहले अपना आवेदन पूरा करें।";
+      setErrorMessage(authErr);
+      return;
+    }
+
     const appState = {
-      applicant_name: formData?.applicant_name || 'Priyadarshini M',
-      annual_family_income: formData?.annual_family_income || 180000,
-      gender: formData?.gender || 'F',
-      category: formData?.category || 'SC',
-      district: formData?.district || 'Chengalpattu',
-      state: formData?.state || 'Tamil Nadu',
-      project_cost: formData?.project_cost || 100000,
+      applicant_name: formData.applicant_name,
+      annual_family_income: formData.annual_family_income || 180000,
+      gender: formData.gender || 'F',
+      category: formData.category || 'SC',
+      district: formData.district || 'Chengalpattu',
+      state: formData.state || 'Tamil Nadu',
+      project_cost: formData.project_cost || 100000,
       scheme_name: evaluationResult?.primary_recommended_scheme?.scheme_name || 'Mahila Samriddhi Yojana (MSY)',
       interest_rate_pct: evaluationResult?.primary_recommended_scheme?.interest_rate_pct || 4.0,
       loan_amount: evaluationResult?.primary_recommended_scheme?.loan_amount || 90000,
@@ -116,7 +125,7 @@ export default function AudioKiosk({
         message: spokenText,
         language: lang,
         history: [],
-        app_state: appState
+        app_state: appState, generate_audio: true
       });
 
       setAiReply(res.reply_text || '');

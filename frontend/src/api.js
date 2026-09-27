@@ -96,3 +96,8 @@ export const fetchAllSchemes = async () => {
   const response = await apiClient.get('/schemes');
   return response.data;
 };
+
+export const fetchTTS = async (text, language = 'en') => {
+  const response = await apiClient.post('/tts', { text, language });
+  return response.data.audio_base64;
+};
