@@ -27,16 +27,16 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
               SIH26092 Initiative
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight mb-6">
               Apply for MoSJE Loan <br/>
-              <span className="text-amber-500 text-3xl md:text-5xl block mt-4">Empowering Marginalized Entrepreneurs</span>
+              <span className="text-amber-500 text-2xl sm:text-3xl md:text-5xl block mt-4">Empowering Marginalized Entrepreneurs</span>
             </h1>
             
             <p className="text-xl text-slate-300 mb-10 leading-relaxed font-medium max-w-2xl">
               Access MoSJE and NSFDC concessional lending schemes through a 100% deterministic, zero-hallucination routing engine. Instant eligibility, transparent EMIs, and NPA-aware branch mapping.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <button 
                 onClick={onStartApply}
                 className="group flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 px-8 py-4 rounded-xl font-black text-lg shadow-xl shadow-amber-500/20 transition-all hover:-translate-y-1"
@@ -210,7 +210,7 @@ export default function LandingPage({ onStartApply, onBrowseDirectory }) {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-blue-900/50 text-blue-300 font-bold text-base uppercase tracking-widest mb-4">
                   SIH26092 Compliance
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black mb-6 leading-tight">Smart Routing.<br/>Zero Dead Ends.</h2>
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-black mb-6 leading-tight">Smart Routing.<br/>Zero Dead Ends.</h2>
                 <p className="text-slate-400 font-medium leading-relaxed text-lg">
                   Government applications often get stuck at branches with high Non-Performing Assets (NPAs) or exhausted budgets. MoSJE Samriddhi solves this mathematically.
                 </p>

@@ -148,7 +148,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
         </div>
       </div>
 
-      <div className="p-6 sm:p-8 grid md:grid-cols-2 gap-8">
+      <div className="p-6 sm:p-8 grid md:grid-cols-1 sm:grid-cols-2 gap-8">
         
         {/* LEFT COLUMN - Demographics */}
         <div className="space-y-6">
@@ -167,7 +167,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-base font-bold text-slate-500 uppercase tracking-wider">Social Category</label>
               <select
@@ -196,7 +196,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className="space-y-2">
               <label className="text-base font-bold text-slate-500 uppercase tracking-wider">State</label>
               <select
@@ -348,7 +348,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-base font-bold text-slate-500 uppercase tracking-wider">Business Stage</label>
               <select
@@ -381,7 +381,7 @@ export default function Step2_HITLForm({ initialData, onVerified, onBack, isVoic
       </div>
       
       {/* Footer Actions */}
-      <div className="bg-[#f8fafc] p-6 sm:p-8 flex justify-between items-center border-t border-slate-200">
+      <div className="bg-[#f8fafc] p-6 sm:p-8 flex flex-col-reverse sm:flex-row gap-4 justify-between sm:items-center border-t border-slate-200">
         <button
           onClick={onBack}
           disabled={loading}

@@ -18,7 +18,7 @@ export default function SanctionDocketModal({
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-slate-300 p-8 space-y-6">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-slate-300 p-4 sm:p-8 space-y-6">
         <div className="flex justify-between items-center border-b border-slate-200 pb-4 print:hidden">
           <div className="flex items-center space-x-2 text-slate-800 font-bold">
             <Award className="w-5 h-5 text-amber-600" />
@@ -41,7 +41,7 @@ export default function SanctionDocketModal({
           </div>
         </div>
 
-        <div className="border-4 border-slate-900 p-8 space-y-6 bg-white print:border-none print:p-0">
+        <div className="border-4 border-slate-900 p-4 sm:p-8 space-y-6 bg-white print:border-none print:p-0">
           <div className="text-center space-y-1 border-b-2 border-slate-900 pb-4">
             <span className="text-base font-black uppercase tracking-widest text-slate-800">
               GOVERNMENT OF INDIA • MINISTRY OF SOCIAL JUSTICE &amp; EMPOWERMENT

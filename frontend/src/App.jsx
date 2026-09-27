@@ -347,7 +347,7 @@ const [step, setStep] = useState(1);
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      showToast({type: 'error', message: "Failed to submit application."});
+      showToast({type: 'error', message: "Error: " + (err.response?.data?.detail || err.message || "Failed")});
     }
   };
 
@@ -381,7 +381,7 @@ const [step, setStep] = useState(1);
       ) : currentView === 'dashboard' ? (
         <CitizenDashboard user={user} onViewDocket={(data) => { setDocketData(data); setShowDocketModal(true); }} />
       ) : (
-        <main className="max-w-4xl mx-auto pt-32 md:pt-36 lg:pt-40 pb-12 px-4 sm:px-6">
+        <main className="max-w-4xl mx-auto pt-32 md:pt-36 lg:pt-40 pb-12 px-2 sm:px-4 sm:px-6">
           <div className="mb-10 text-center">
             <h1 className="text-4xl font-black text-primary tracking-tight mb-3">
               Apply for MoSJE Loan
@@ -391,9 +391,9 @@ const [step, setStep] = useState(1);
             </p>
           </div>
 
-          <div className="mb-12 relative px-4">
-            <div className="absolute top-5 left-10 right-10 h-1.5 bg-slate-200 -z-10 -translate-y-1/2 rounded-full"></div>
-            <div className={`absolute top-5 left-10 h-1.5 bg-primary -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out`} style={{ width: `calc(${((step - 1) / 4) * 100}% - 40px)` }}></div>
+          <div className="mb-12 relative px-2 sm:px-4">
+            <div className="absolute top-5 left-7 sm:left-10 right-7 sm:right-10 h-1.5 bg-slate-200 -z-10 -translate-y-1/2 rounded-full"></div>
+            <div className={`absolute top-5 left-7 sm:left-10 h-1.5 bg-primary -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out`} style={{ width: `calc(${((step - 1) / 4) * 100}% - 40px)` }}></div>
             
             <div className="flex justify-between items-start">
               {[
@@ -403,7 +403,7 @@ const [step, setStep] = useState(1);
                 { num: 4, label: 'EMI Calc' },
                 { num: 5, label: 'Route' }
               ].map((s) => (
-                <div key={s.num} className="flex flex-col items-center w-20">
+                <div key={s.num} className="flex flex-col items-center w-14 sm:w-20">
                   <div 
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-black border-4 transition-all duration-500 ${
                       step >= s.num 

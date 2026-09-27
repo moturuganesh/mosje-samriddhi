@@ -180,7 +180,7 @@ export default function TextChatDrawer({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-full md:w-[500px] max-w-full bg-slate-900 text-white rounded-3xl shadow-2xl border-2 border-slate-700 overflow-hidden flex flex-col h-[80vh] min-h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-200">
+    <div className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[500px] max-w-full bg-slate-900 text-white rounded-t-3xl sm:rounded-b-3xl shadow-2xl border-t-2 sm:border-2 border-slate-700 overflow-hidden flex flex-col h-[85vh] sm:h-[80vh] min-h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-200">
       {/* Header */}
       <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
         <div className="flex items-center space-x-3">

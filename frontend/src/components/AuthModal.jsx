@@ -51,7 +51,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       <div className="relative bg-surface rounded-[2rem] w-full max-w-md overflow-hidden shadow-glass-lg animate-in zoom-in-95 slide-in-from-bottom-10 duration-500">
         
         {/* Header */}
-        <div className="bg-primary p-8 md:p-10 text-white relative overflow-hidden">
+        <div className="bg-primary p-6 sm:p-8 md:p-10 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-success/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
           
@@ -72,7 +72,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         </div>
 
         {/* Body */}
-        <div className="p-8 md:p-10">
+        <div className="p-6 sm:p-8 md:p-10">
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-danger-light border border-danger-light text-danger-dark font-bold text-sm text-center flex items-center justify-center gap-2 animate-in slide-in-from-top-2">
               <ShieldCheck className="w-4 h-4" />
