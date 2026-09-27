@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Step1_Ingestion from './components/Step1_Ingestion';
 import Step2_HITLForm from './components/Step2_HITLForm';
@@ -393,7 +393,7 @@ const [step, setStep] = useState(1);
 
           <div className="mb-12 relative px-2 sm:px-4">
             <div className="absolute top-5 left-7 sm:left-10 right-7 sm:right-10 h-1.5 bg-slate-200 -z-10 -translate-y-1/2 rounded-full"></div>
-            <div className={`absolute top-5 left-7 sm:left-10 h-1.5 bg-primary -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out`} style={{ width: `calc(${((step - 1) / 4) * 100}% - 40px)` }}></div>
+            <div className={`absolute top-5 left-7 sm:left-10 h-1.5 bg-primary -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out`} style={{ width: `max(0px, calc(${((step - 1) / 4) * 100}% - 40px))` }}></div>
             
             <div className="flex justify-between items-start">
               {[
