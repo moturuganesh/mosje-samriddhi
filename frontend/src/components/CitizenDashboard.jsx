@@ -17,7 +17,7 @@ export default function CitizenDashboard({ user }) {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-[160px] pb-12 animate-in fade-in duration-500">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 sm:pt-36 lg:pt-40 pb-12 animate-in fade-in duration-500">
       
       
       {/* Official Dashboard Header */}
@@ -30,7 +30,7 @@ export default function CitizenDashboard({ user }) {
         </div>
       )}
 
-      <div className="bg-primary rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden mb-12">
+      <div className="bg-primary rounded-3xl p-6 sm:p-8 md:p-12 text-white shadow-2xl relative overflow-hidden mb-12">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
@@ -79,7 +79,7 @@ export default function CitizenDashboard({ user }) {
               <div key={idx} className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden group hover:shadow-2xl transition-all duration-300">
                 
                 {/* Card Header */}
-                <div className="p-6 md:p-8 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
+                <div className="p-5 sm:p-6 md:p-8 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
                   <div>
                     <span className={`inline-block px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest border mb-3 ${
                       app.status.includes('Disbursed') ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
@@ -98,7 +98,7 @@ export default function CitizenDashboard({ user }) {
                   </div>
                 </div>
 
-                <div className="p-6 md:p-8 space-y-8">
+                <div className="p-5 sm:p-6 md:p-8 space-y-8">
                   {/* Financials Grid */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-[#f8fafc] p-4 md:p-5 rounded-2xl border border-slate-100">

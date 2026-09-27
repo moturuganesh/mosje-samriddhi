@@ -237,7 +237,7 @@ export default function Step3_SchemeMoratorium({ evaluationResult, onComplete, o
             </div>
 
             {showAmortization && emiResult?.amortization_schedule && (
-              <div className="mt-6 max-h-[300px] overflow-y-auto rounded-xl border border-slate-700 bg-primary">
+              <div className="mt-6 max-h-[300px] overflow-auto rounded-xl border border-slate-700 bg-primary">
                 <table className="w-full text-left text-base text-slate-300">
                   <thead className="bg-slate-800 text-slate-400 font-black uppercase text-[10px] tracking-wider sticky top-0 z-10">
                     <tr>

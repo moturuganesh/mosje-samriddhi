@@ -350,7 +350,7 @@ export default function AdminDashboard() {
 
   return (
 
-    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[160px] pb-12">
+    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 sm:pt-36 lg:pt-40 pb-12">
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
 
