@@ -44,16 +44,27 @@ def extract_document(file: UploadFile = File(...)):
         prompt = "Extract the following fields from this Indian government certificate or admission letter and return ONLY a strict JSON object: applicant_name, gender, category (SC/ST/OBC/General), annual_income (numeric), district, state, certificate_id, project_cost, business_activity, education_status (course name or degree if this is an admission letter), sector (guess from business_activity: Agriculture, Manufacturing, Services, Tech, Healthcare), business_stage (guess Ideation or Growth / Scaling)." 
 
         image_part = types.Part.from_bytes(data=contents, mime_type=mime_type)
-
-        response = client.models.generate_content(
-            model='gemini-3.6-flash',
-            contents=[image_part, prompt],
-            config=types.GenerateContentConfig(
-                response_mime_type='application/json',
-                response_schema=ApplicantProfile,
-                temperature=0.1
+        try:
+            response = client.models.generate_content(
+                model='gemini-3.5-flash',
+                contents=[image_part, prompt],
+                config=types.GenerateContentConfig(
+                    response_mime_type='application/json',
+                    response_schema=ApplicantProfile,
+                    temperature=0.1
+                )
             )
-        )
+        except Exception:
+            # Fallback to older model if quota/404 occurs
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=[image_part, prompt],
+                config=types.GenerateContentConfig(
+                    response_mime_type='application/json',
+                    response_schema=ApplicantProfile,
+                    temperature=0.1
+                )
+            )
 
         if response.parsed:
             return response.parsed
