@@ -70,7 +70,7 @@ async def generate_tts_base64_async(text: str, lang_code: str) -> str:
 async def generate_gemini_direct(api_key: str, contents: list, system_instruction: str) -> str:
     """Direct REST API call to Gemini. Fails FAST (3s) to trigger smart fallback."""
     # Use the fastest, lightest models available on this API key
-    models = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-2.5-flash"]
+    models = ["gemini-3.8-flash"]
     
     last_error = None
     for model in models:
