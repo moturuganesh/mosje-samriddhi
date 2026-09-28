@@ -442,7 +442,7 @@ export default function AdminDashboard() {
 
             <span className="text-2xl font-black text-emerald-700 mt-1 block">
 
-              {data.avg_npa_rate}%
+              {data?.average_npa_percentage || 0}%
 
             </span>
 
